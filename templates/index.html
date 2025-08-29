@@ -1,9 +1,32 @@
 <html>
 <head>
-    <title>Item Details</title>
+    <title>Daily Quest</title>
     <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h1><a href="{{ url_for('root') }}">Item ID: {{ id }}</a></h1>
+    <h1>Daily Quest</h1>
+    {% for quest in quests %}
+    <form>
+      <fieldset>
+        <legend>{{ quest.title }}</legend>
+
+        {% if quest.description %}
+        <p>{{ quest.description}}</p>
+        {% endif %}
+
+        {% for objective in quest.objectives %}
+          <div>
+            <label>
+              <input type="checkbox"/>
+              {{ objective }}
+            </label>
+          </div>
+        {% endfor %}
+
+        <strong>Reward: </strong> {{ quest.reward }}
+
+      </fieldset>
+    </form>
+    {% endfor %}
 </body>
 </html>
