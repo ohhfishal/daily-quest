@@ -10,6 +10,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     """
@@ -22,7 +23,7 @@ async def root(request: Request):
             "id": 1,
             "quests": [
                 quest.Quest(
-                    "It's dangerous to go alone!", 
+                    "It's dangerous to go alone!",
                     objectives=["Take this."],
                     reward=quest.Reward(
                         items=["The Master Sword"],
