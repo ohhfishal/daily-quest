@@ -11,7 +11,20 @@
 
   git-hooks.hooks = {
     shellcheck.enable = true;
-    black.enable = true;
+    ruff.enable = true;
   };
 
+  git-hooks.hooks.unit-tests = {
+    # TODO: enable when we have tests :)
+    enable = false;
+    name = "Unit tests";
+    entry = "python -m unittest discover .";
+    # types = [ "python" ];
+    language = "python";
+
+    # Set this to false to not pass the changed files
+    # to the command (default: true):
+    pass_filenames = false;
+  };
+  # enterTest = " python -m unittest discover . ";
 }
