@@ -7,6 +7,8 @@
     python3.pkgs.fastapi
     python3.pkgs.uvicorn
     python3.pkgs.jinja2
+
+    python3.pkgs.icecream
   ];
 
   git-hooks.hooks = {

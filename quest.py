@@ -1,18 +1,24 @@
 from dataclasses import dataclass, field
 from typing import List
 
+@dataclass 
+class Item:
+    name: str
+    description: str = ""
 
 @dataclass
 class Reward:
     gold: int = 0
-    items: List[str] = field(default_factory=list)
+    items: List[Item] = field(default_factory=list)
 
     def __repr__(self):
         return ",".join(
             [
-                item
-                for item in [f"{self.gold} gold" if self.gold > 0 else ""] + self.items
-                if item
+                string
+                for string in 
+                    [f"{self.gold} gold" if self.gold > 0 else ""] + 
+                    [item.name + (f" ({item.description})" if item.description else "") for item in self.items]
+                if string
             ],
         )
 

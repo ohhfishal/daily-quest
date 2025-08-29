@@ -3,7 +3,10 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from . import session
 import quest
+
+session.foo()
 
 app = FastAPI()
 
@@ -26,7 +29,17 @@ async def root(request: Request):
                     "It's dangerous to go alone!",
                     objectives=["Take this."],
                     reward=quest.Reward(
-                        items=["The Master Sword"],
+                        items=[
+                            quest.Item("The Master Sword", description="Unlocks the inventory!"),
+                        ],
+                    ),
+                ),
+                quest.Quest(
+                    "Enter the dragon's lair",
+                    objectives=["Do something new and uncomfortable"],
+                    reward=quest.Reward(
+                        gold=10,
+                        # items=["The Master Sword"],
                     ),
                 ),
             ],
