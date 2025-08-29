@@ -2,9 +2,10 @@
 <head>
     <title>Daily Quest</title>
     <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.js" integrity="sha384-ksKjJrwjL5VxqAkAZAVOPXvMkwAykMaNYegdixAESVr+KqLkKE8XBDoZuwyWVUDv" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Daily Quest</h1>
+    <h1>Daily Quest ({{ session.id }})</h1>
     {% for quest in quests %}
     <form>
       <fieldset>
