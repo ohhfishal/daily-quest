@@ -1,0 +1,134 @@
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background: black;
+    color: #c0c0c0;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    font-size: 14px;
+}
+
+h1 {
+    text-align: center;
+    background: #000000;
+    color: #ffffff;
+}
+
+form {
+    max-width: 50rem;
+    margin: 0 auto 1rem auto;
+}
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    padding: 0.75rem;
+}
+
+fieldset:hover {
+    border-color: #ffffff;
+}
+
+legend {
+    font-size: 1rem;
+    font-weight: normal;
+    color: #ffffff;
+    padding: 0 0.5rem;
+}
+
+legend::before {
+    content: '> ';
+}
+
+legend::after {
+    content: ' <';
+}
+
+div {
+    margin-bottom: 0.5rem;
+}
+
+label {
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+label:hover {
+    color: #ffffff;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+label:has(input[type="checkbox"]:not(:checked))::before {
+    content: '[ ] ';
+    color: #ffffff;
+}
+
+label:has(input[type="checkbox"]:checked)::before {
+    content: '[X] ';
+    color: #ffffff;
+}
+
+label:has(input[type="checkbox"]:checked) {
+    color: #808080;
+    text-decoration: line-through;
+}
+
+strong {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+button {
+    background: #000000;
+    color: #c0c0c0;
+    border: 1px solid #c0c0c0;
+    padding: 0.5rem 1.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: normal;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+button:hover {
+    background: #c0c0c0;
+    color: #000000;
+}
+
+button:active {
+    background: #ffffff;
+    color: #000000;
+}
+
+button:disabled {
+    background: #000000;
+    color: #404040;
+    border-color: #404040;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    h1 {
+        font-size: 1.1rem;
+        padding: 0.8rem;
+    }
+    
+    fieldset {
+        padding: 0.8rem;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
