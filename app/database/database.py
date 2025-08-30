@@ -6,7 +6,10 @@ from typing import Annotated
 
 from app.database.session import UserSession
 
+from functools import wraps
+
 import uuid
+import contextlib
 
 engine = None
 
@@ -38,7 +41,32 @@ def open():
 Service = Annotated[Session, Depends(open)]
 
 
-def get_or_create_session(request: Request, db: Service) -> UserSession:
+def get_or_create_session(open_func):
+    def function(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            with contextlib.contextmanager(open)() as database:
+                request = kwargs["request"]
+                session = get_session(request, database)
+                request.state.session = session
+
+                result = await func(*args, **kwargs)
+
+                result.set_cookie(
+                    key="session_id",
+                    value=session.id,
+                    httponly=True,
+                    secure=False,  # TODO: set to true when using HTTPS
+                    samesite="lax",
+                )
+                return result
+
+        return wrapper
+
+    return function
+
+
+def get_session(request: Request, db: Service) -> UserSession:
     session_id = request.cookies.get("session_id")
     if session_id:
         session = db.get(UserSession, uuid.UUID(session_id))

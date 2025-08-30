@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -20,14 +20,13 @@ def on_startup():
 
 
 @app.get("/", response_class=HTMLResponse)
-async def root(request: Request, response: Response, db: database.Service):
-    session = database.get_or_create_session(request, db)
-
+@database.get_or_create_session(database.open)
+async def root(request: Request):
     response = templates.TemplateResponse(
         request=request,
         name="index.html",
         context={
-            "session": session,
+            "session": request.state.session,
             "quests": [
                 Quest(
                     "It's dangerous to go alone!",
@@ -48,14 +47,5 @@ async def root(request: Request, response: Response, db: database.Service):
                 ),
             ],
         },
-    )
-
-    # reset the cookie
-    response.set_cookie(
-        key="session_id",
-        value=session.id,
-        httponly=True,
-        secure=False,  # TODO: set to true when using HTTPS
-        samesite="lax",
     )
     return response
