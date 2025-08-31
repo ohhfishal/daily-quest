@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -11,21 +11,32 @@ import uuid
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
-
-
 @app.on_event("startup")
 def on_startup():
     database.init()
 
 
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+templates = Jinja2Templates(directory="app/templates")
+
+@app.post("/quest/{id}", response_class=HTMLResponse)
+@database.get_session(database.open, can_create=False)
+async def update_quest(request: Request):
+    # TODO: Implement
+    return PlainTextResponse("OK")
+    # return templates.TemplateResponse(
+    #     request=request,
+    #     name="components/quest.html",
+    #     context={
+    #     },
+    # )
+
 @app.get("/", response_class=HTMLResponse)
 @database.get_session(database.open, can_create=True)
 async def root(request: Request):
-    response = templates.TemplateResponse(
+    return templates.TemplateResponse(
         request=request,
-        name="index.html",
+        name="pages/index.html",
         context={
             "session": request.state.session,
             "quests": [
@@ -51,4 +62,3 @@ async def root(request: Request):
             ],
         },
     )
-    return response

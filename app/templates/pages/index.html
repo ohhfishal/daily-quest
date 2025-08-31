@@ -7,7 +7,11 @@
 <body>
     <h1>Daily Quest ({{ session.id }})</h1>
     {% for quest in quests %}
-    <form hx-post="/quest/{{ quest.id }}">
+    <form 
+      id="form_quest_{{ quest.id }}"
+      hx-post="/quest/{{ quest.id }}"
+      hx-swap="delete"
+    >
       <fieldset>
         <legend>{{ quest.title }}</legend>
 
@@ -18,7 +22,7 @@
         {% for objective in quest.objectives %}
           <div>
             <label>
-              <input type="checkbox"/>
+              <input type="checkbox" required />
               {{ objective }}
             </label>
           </div>

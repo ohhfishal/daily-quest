@@ -1,0 +1,27 @@
+<form hx-post="/quest/{{ quest.id }}">
+  <fieldset>
+    <legend>{{ quest.title }}</legend>
+
+    {% if quest.description %}
+    <p>{{ quest.description}}</p>
+    {% endif %}
+
+    {% for objective in quest.objectives %}
+      <div>
+        <label>
+          <input type="checkbox"/>
+          {{ objective }}
+        </label>
+      </div>
+    {% endfor %}
+
+    <div>
+      <strong>Reward: </strong> {{ quest.reward }}
+    </div>
+
+    <div>
+      <button>Redeem</button>
+    </div>
+
+  </fieldset>
+</form>
