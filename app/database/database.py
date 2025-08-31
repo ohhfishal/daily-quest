@@ -1,4 +1,4 @@
-from fastapi import Depends, Request
+from fastapi import Depends, Request, HTTPException
 from sqlmodel import create_engine, Session, SQLModel
 from sqlmodel.pool import StaticPool
 
@@ -41,13 +41,14 @@ def open():
 Service = Annotated[Session, Depends(open)]
 
 
-def get_or_create_session(open_func):
+def get_session(open_func, can_create=True):
     def function(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
             with contextlib.contextmanager(open)() as database:
                 request = kwargs["request"]
-                session = get_session(request, database)
+                session = _get_session(request, database, can_create=can_create)
+
                 request.state.session = session
 
                 result = await func(*args, **kwargs)
@@ -66,16 +67,27 @@ def get_or_create_session(open_func):
     return function
 
 
-def get_session(request: Request, db: Service) -> UserSession:
+def _get_session(request: Request, db: Service, can_create=True) -> UserSession:
     session_id = request.cookies.get("session_id")
     if session_id:
         session = db.get(UserSession, uuid.UUID(session_id))
         if session:
             # TODO: Mark session as used??
             return session
-
-    user_session = UserSession()
-    db.add(user_session)
-    db.commit()
-    db.refresh(user_session)
-    return user_session
+        elif not can_create:
+            raise HTTPException(
+                status_code=401,
+                detail="Unknown session",
+            )
+    if not can_create:
+        raise HTTPException(
+            status_code=400,
+            detail="Missing session id",
+        )
+    else:
+        user_session = UserSession()
+        db.add(user_session)
+        db.commit()
+        db.refresh(user_session)
+        return user_session
+    raise Exception("BUG FOUND")
