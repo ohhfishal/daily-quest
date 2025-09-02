@@ -3,8 +3,11 @@ from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-
 from app.database import database
+
+import logging
+
+logger = logging.getLogger("uvicorn")
 
 
 app = FastAPI()
@@ -20,7 +23,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 
 @app.post("/quest/{id}", response_class=HTMLResponse)
-async def update_quest(request: Request, db=Depends(database.open)):
+async def update_quest(request: Request, db=Depends(database.open_session)):
     # TODO: Implement
     return PlainTextResponse("OK")
     # return templates.TemplateResponse(
@@ -36,12 +39,10 @@ async def root(
     request: Request,
     response: Response,
     user_session=Depends(database.get_session_or_create),
-    db=Depends(database.open),
+    db=Depends(database.open_session),
 ):
     quests = database.get_all_quests(user_session, db)
-    from icecream import ic
-
-    ic(quests)
+    logger.info(quests)
     response = templates.TemplateResponse(
         request=request,
         name="pages/index.html",

@@ -1,0 +1,22 @@
+{
+  "quests": {
+    "tutorial":  {
+      "title": "It's dangerous to go alone!",
+      "release_date": "2025-09-02",
+      "objectives": ["Take this."],
+      "rewards": {
+        "items": ["The Master Sword"]
+      }
+    },
+    "dragon_lair_0":  {
+      "title": "Enter the dragon's lair",
+      "release_date": "2025-09-02",
+      "objectives": [
+        "Do something new and uncomfortable."
+      ],
+      "rewards": {
+        "gold": 100
+      }
+    }
+  }
+}
