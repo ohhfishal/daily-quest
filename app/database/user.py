@@ -6,6 +6,7 @@ import uuid
 
 from typing import List
 
+
 class UserSession(SQLModel, table=True):
     __tablename__ = "users"
     id: uuid.UUID = Field(
@@ -35,6 +36,7 @@ class UserSession(SQLModel, table=True):
 
     class Config:
         arbitrary_types_allowed = True
+
 
 class QuestStatus(str, Enum):
     DONE = "done"

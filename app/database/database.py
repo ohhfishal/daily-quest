@@ -24,6 +24,7 @@ _JSON_PATH = "app/database/quests.json"
 TUTORIAL_ID = "tutorial"
 TUTORIAL_ITEM = "The Master Sword"
 
+
 def open_session():
     if engine is None:
         raise Exception("attempted to get database before calling init")
@@ -33,25 +34,30 @@ def open_session():
 
 
 def get_daily_quests(session: UserSession, db=Depends(open_session)):
-    show_tutorial = (TUTORIAL_ITEM not in session.items) or (session.updated_at.date() == session.created_at.date())
-    return db.exec((
-        select(Quest, UserState)
-        .where(
-            or_(
-                func.date(Quest.release_date) == date.today(),
-                (show_tutorial and Quest.id == TUTORIAL_ID),
+    show_tutorial = (TUTORIAL_ITEM not in session.items) or (
+        session.updated_at.date() == session.created_at.date()
+    )
+    return db.exec(
+        (
+            select(Quest, UserState)
+            .where(
+                or_(
+                    func.date(Quest.release_date) == date.today(),
+                    (show_tutorial and Quest.id == TUTORIAL_ID),
+                )
+            )
+            .order_by(Quest.release_date)
+            .outerjoin(
+                UserState,
+                Quest.id == UserState.quest,
             )
         )
-        .order_by(Quest.release_date)
-        .outerjoin(
-            UserState,
-            Quest.id == UserState.quest,
-        )
-    )).all()
+    ).all()
+
 
 def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_session)):
     quest = db.get(Quest, quest_id)
-    if not quest or ( quest.id != TUTORIAL_ID and quest.release_date != date.today()):
+    if not quest or (quest.id != TUTORIAL_ID and quest.release_date != date.today()):
         raise ValueError("Quest does not exist")
 
     state = UserState(user=session.id, quest=quest_id)
@@ -65,8 +71,12 @@ def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_sess
     db.refresh(session)
     db.refresh(state)
 
-    assert session.gold >= quest.rewards_gold, f"Expected at least {quest.rewards_gold} in session"
-    assert len(session.items) >= len(quest.rewards_items), f"Expected at least {len(quest.rewards_items)} in items"
+    assert session.gold >= quest.rewards_gold, (
+        f"Expected at least {quest.rewards_gold} in session"
+    )
+    assert len(session.items) >= len(quest.rewards_items), (
+        f"Expected at least {len(quest.rewards_items)} in items"
+    )
     return quest, state
 
 

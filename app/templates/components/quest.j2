@@ -15,12 +15,11 @@
       <div>
         <label>
           {% if session is none %}
-            <input type="checkbox" required />
+            <input type="checkbox" required /></input>
           {% else %}
-            <input type="checkbox" disabled checked />
+            <input type="checkbox" disabled checked /></input>
           {% endif %}
           {{ objective }}
-          </input>
         </label>
       </div>
     {% endfor %}

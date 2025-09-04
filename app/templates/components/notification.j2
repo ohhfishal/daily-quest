@@ -1,0 +1,7 @@
+{% macro done_banner(show) %}
+<div class="card" hx-get="/components/notification" hx-trigger="quest_completed from:body">
+{% if show %}
+      <h3>* All quests completed, come back tomorrow! *</h3>
+{% endif %}
+</div>
+{% endmacro %}

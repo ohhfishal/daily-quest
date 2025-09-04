@@ -1,5 +1,6 @@
 {% import 'components/quest.j2' as component %}
 {% import 'components/inventory.j2' as inventory %}
+{% import 'components/notification.j2' as notification %}
 <html>
 <head>
     <title>Daily Quest</title>
@@ -7,7 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.js" integrity="sha384-ksKjJrwjL5VxqAkAZAVOPXvMkwAykMaNYegdixAESVr+KqLkKE8XBDoZuwyWVUDv" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Daily Quest ({{ session.id }})</h1>
+    <h1>Daily Quest</h1>
+    {{ notification.done_banner(done) }}
+
     {% for quest, state in quests %}
       {{ component.quest_form(quest, state) }}
     {% endfor %}

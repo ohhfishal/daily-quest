@@ -5,6 +5,8 @@ from fastapi.templating import Jinja2Templates
 
 from app.database import database
 
+import functools
+
 import logging
 
 logger = logging.getLogger("uvicorn")
@@ -25,6 +27,7 @@ def get_logger():
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
+
 @app.get("/components/inventory", response_class=HTMLResponse)
 async def components_inventory(
     request: Request,
@@ -38,6 +41,26 @@ async def components_inventory(
             "session": user_session,
         },
     )
+
+
+@app.get("/components/notification", response_class=HTMLResponse)
+async def components_notification(
+    request: Request,
+    user_session=Depends(database.get_session_or_error),
+    db=Depends(database.open_session),
+):
+    quests = database.get_daily_quests(user_session, db)
+    if len(quests) == 0:
+        logger.error(f"Got 0 quests session={user_session.id}")
+
+    return templates.TemplateResponse(
+        request=request,
+        name="components/notification.html",
+        context={
+            "done": functools.reduce(lambda x, y: x and y[1] is not None, quests),
+        },
+    )
+
 
 @app.post("/quest/{id}", response_class=HTMLResponse)
 async def update_quest(
@@ -90,12 +113,15 @@ async def root(
     quests = database.get_daily_quests(user_session, db)
     if len(quests) == 0:
         logger.error(f"Got 0 quests session={user_session.id}")
+
     response = templates.TemplateResponse(
         request=request,
         name="index.html",
         context={
             "session": user_session,
             "quests": quests,
+            # Check if all quests are done
+            "done": functools.reduce(lambda x, y: x and y[1] is not None, quests),
         },
     )
     response.set_cookie(
