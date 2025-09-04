@@ -38,11 +38,11 @@ legend {
     padding: 0 0.5rem;
 }
 
-legend::before {
+legend.quest::before {
     content: '> ';
 }
 
-legend::after {
+legend.quest::after {
     content: ' <';
 }
 

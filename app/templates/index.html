@@ -1,4 +1,5 @@
 {% import 'components/quest.j2' as component %}
+{% import 'components/inventory.j2' as inventory %}
 <html>
 <head>
     <title>Daily Quest</title>
@@ -10,5 +11,7 @@
     {% for quest, state in quests %}
       {{ component.quest_form(quest, state) }}
     {% endfor %}
+
+    {{ inventory.card(session) }}
 </body>
 </html>

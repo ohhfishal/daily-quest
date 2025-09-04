@@ -1,9 +1,10 @@
-from sqlmodel import Field, SQLModel, Column
+from sqlmodel import Field, SQLModel, Column, JSON
 from sqlalchemy import DateTime, func
 from enum import Enum
 from datetime import datetime
 import uuid
 
+from typing import List
 
 class UserSession(SQLModel, table=True):
     __tablename__ = "users"
@@ -26,6 +27,14 @@ class UserSession(SQLModel, table=True):
         ),
     )
 
+    gold: int = Field(default=0)
+    items: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(JSON),
+    )
+
+    class Config:
+        arbitrary_types_allowed = True
 
 class QuestStatus(str, Enum):
     DONE = "done"

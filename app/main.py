@@ -25,6 +25,19 @@ def get_logger():
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
+@app.get("/components/inventory", response_class=HTMLResponse)
+async def components_inventory(
+    request: Request,
+    user_session=Depends(database.get_session_or_error),
+    db=Depends(database.open_session),
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="components/inventory.html",
+        context={
+            "session": user_session,
+        },
+    )
 
 @app.post("/quest/{id}", response_class=HTMLResponse)
 async def update_quest(
@@ -34,9 +47,10 @@ async def update_quest(
     db=Depends(database.open_session),
     logger=Depends(get_logger),
 ):
+    # TODO: Have this refresh the page or emit an event
     try:
         quest, state = database.mark_quest_as_done(user_session, id, db)
-        return templates.TemplateResponse(
+        response = templates.TemplateResponse(
             request=request,
             name="components/quest.html",
             context={
@@ -44,10 +58,18 @@ async def update_quest(
                 "state": state,
             },
         )
+        response.headers["HX-Trigger"] = "quest_completed"
+        return response
     except ValueError:
         raise HTTPException(
             status_code=404,
             detail="Quest does not exist",
+        )
+    except AssertionError as e:
+        logger.error(f"Assert tripped: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Unknown error occurred",
         )
     except Exception as e:
         logger.error(f"Unknown Exception: {e}")
@@ -55,10 +77,7 @@ async def update_quest(
             status_code=500,
             detail="Unknown error occurred",
         )
-    raise HTTPException(
-        status_code=500,
-        detail="Unknown error occurred",
-    )
+    assert False, "Unreachable code reached"
 
 
 @app.get("/")
@@ -69,6 +88,8 @@ async def root(
     db=Depends(database.open_session),
 ):
     quests = database.get_daily_quests(user_session, db)
+    if len(quests) == 0:
+        logger.error(f"Got 0 quests session={user_session.id}")
     response = templates.TemplateResponse(
         request=request,
         name="index.html",

@@ -10,7 +10,7 @@ devenv shell
 - [ ] Feature Request / Quest Idea workflows (Probably just a link to this repo)
 - [X] UI element to show a completed quest for the day
 - [ ] Communicate to come back tomorrow
-- [ ] Primative inventory section
+- [X] Primative inventory section
 - [ ] Notify check boxes must be clicked to redeem
 
 ## General Roadmap

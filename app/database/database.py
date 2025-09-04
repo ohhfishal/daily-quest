@@ -22,7 +22,7 @@ SessionLocal = None
 # TODO: Don't have hard coded
 _JSON_PATH = "app/database/quests.json"
 TUTORIAL_ID = "tutorial"
-
+TUTORIAL_ITEM = "The Master Sword"
 
 def open_session():
     if engine is None:
@@ -33,9 +33,8 @@ def open_session():
 
 
 def get_daily_quests(session: UserSession, db=Depends(open_session)):
-    # TODO: This is an assummption that won't be true in the future
-    show_tutorial = session.created_at == session.updated_at
-    query = (
+    show_tutorial = (TUTORIAL_ITEM not in session.items) or (session.updated_at.date() == session.created_at.date())
+    return db.exec((
         select(Quest, UserState)
         .where(
             or_(
@@ -43,28 +42,31 @@ def get_daily_quests(session: UserSession, db=Depends(open_session)):
                 (show_tutorial and Quest.id == TUTORIAL_ID),
             )
         )
+        .order_by(Quest.release_date)
         .outerjoin(
             UserState,
             Quest.id == UserState.quest,
         )
-    )
-    return db.exec(query).all()
-
+    )).all()
 
 def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_session)):
-    quest = db.exec(select(Quest).where(Quest.id == quest_id)).one_or_none()
-    if quest is None or (
-        quest.id != TUTORIAL_ID and quest.release_date != date.today()
-    ):
+    quest = db.get(Quest, quest_id)
+    if not quest or ( quest.id != TUTORIAL_ID and quest.release_date != date.today()):
         raise ValueError("Quest does not exist")
 
-    state = UserState(
-        user=session.id,
-        quest=quest_id,
-    )
+    state = UserState(user=session.id, quest=quest_id)
     db.add(state)
+
+    session.gold += quest.rewards_gold
+    session.items = session.items + quest.rewards_items
+    db.add(session)
     db.commit()
+
+    db.refresh(session)
     db.refresh(state)
+
+    assert session.gold >= quest.rewards_gold, f"Expected at least {quest.rewards_gold} in session"
+    assert len(session.items) >= len(quest.rewards_items), f"Expected at least {len(quest.rewards_items)} in items"
     return quest, state
 
 
