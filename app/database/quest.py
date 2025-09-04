@@ -13,6 +13,7 @@ DATE_FORMAT = "%Y-%m-%d"
 
 
 class Quest(SQLModel, table=True):
+    __tablename__ = "quests"
     id: str = Field(
         index=True,
         primary_key=True,

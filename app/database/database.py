@@ -2,13 +2,15 @@ from fastapi import Depends, Request, Response, HTTPException
 from sqlmodel import create_engine, Session, SQLModel, select
 from sqlmodel.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import func, or_
 
 
-from app.database.session import UserSession
+from app.database.user import UserSession, UserState
 from app.database.quest import Quest, load_quests
 
 import uuid
 import logging
+from datetime import date
 
 logger = logging.getLogger("uvicorn")
 
@@ -19,6 +21,7 @@ SessionLocal = None
 
 # TODO: Don't have hard coded
 _JSON_PATH = "app/database/quests.json"
+TUTORIAL_ID = "tutorial"
 
 
 def open_session():
@@ -29,8 +32,40 @@ def open_session():
         yield session
 
 
-def get_all_quests(session: UserSession, db=Depends(open_session)):
-    return db.exec(select(Quest)).all()
+def get_daily_quests(session: UserSession, db=Depends(open_session)):
+    # TODO: This is an assummption that won't be true in the future
+    show_tutorial = session.created_at == session.updated_at
+    query = (
+        select(Quest, UserState)
+        .where(
+            or_(
+                func.date(Quest.release_date) == date.today(),
+                (show_tutorial and Quest.id == TUTORIAL_ID),
+            )
+        )
+        .outerjoin(
+            UserState,
+            Quest.id == UserState.quest,
+        )
+    )
+    return db.exec(query).all()
+
+
+def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_session)):
+    quest = db.exec(select(Quest).where(Quest.id == quest_id)).one_or_none()
+    if quest is None or (
+        quest.id != TUTORIAL_ID and quest.release_date != date.today()
+    ):
+        raise ValueError("Quest does not exist")
+
+    state = UserState(
+        user=session.id,
+        quest=quest_id,
+    )
+    db.add(state)
+    db.commit()
+    db.refresh(state)
+    return quest, state
 
 
 def get_session_or_create(
@@ -73,6 +108,7 @@ def _get_session(
         db.add(user_session)
         db.commit()
         db.refresh(user_session)
+        logger.info(f"creating new session: {user_session.id}")
         return user_session
     raise Exception("BUG FOUND")
 
@@ -106,9 +142,9 @@ def init(file=":memory:"):
     except ValueError as e:
         logger.error(f"Loading JSON quests: {e}")
         quests = []
-    logger.info(f"Loading {len(quests)} quests")
 
     with Session(engine) as session:
         for quest in quests:
             session.add(quest)
         session.commit()
+    logger.info(f"Loaded {len(quests)} quests")
