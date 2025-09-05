@@ -135,3 +135,7 @@ async def root(
         samesite="lax",
     )
     return response
+
+@app.get("/health")
+async def health():
+    return "OK"
