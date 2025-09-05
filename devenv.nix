@@ -10,6 +10,7 @@
 
   packages = with pkgs; [
     # sqlite
+    python3.pkgs.pip
     python3.pkgs.fastapi
     python3.pkgs.uvicorn
     python3.pkgs.jinja2
