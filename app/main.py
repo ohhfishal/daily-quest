@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from app.database import database
 
 import functools
+from datetime import datetime
 
 import logging
 
@@ -18,6 +19,8 @@ app = FastAPI()
 @app.on_event("startup")
 def on_startup():
     database.init()
+    now = datetime.now()
+    logger.debug(f"Stared: {now.date()} {now.time()}")
 
 
 def get_logger():
