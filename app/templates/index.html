@@ -1,6 +1,7 @@
 {% import 'components/quest.j2' as component %}
 {% import 'components/inventory.j2' as inventory %}
 {% import 'components/notification.j2' as notification %}
+{% import 'components/footer.j2' as footer %}
 <html>
 <head>
     <title>Daily Quest</title>
@@ -9,13 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>Daily Quest</h1>
-    {{ notification.done_banner(done) }}
+    <div>
+      <h1>Daily Quest</h1>
+      {{ notification.done_banner(done) }}
 
-    {% for quest, state in quests %}
-      {{ component.quest_form(quest, state) }}
-    {% endfor %}
+      {% for quest, state in quests %}
+        {{ component.quest_form(quest, state) }}
+      {% endfor %}
 
-    {{ inventory.card(session) }}
+      {{ inventory.card(session) }}
+    </div>
+    {{ footer.footer() }}
 </body>
 </html>

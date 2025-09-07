@@ -105,6 +105,9 @@ async def update_quest(
         )
     assert False, "Unreachable code reached"
 
+@app.get("/contact")
+async def contact(response: Response):
+    raise Exception("NOT IMPLEMENTED")
 
 @app.get("/")
 async def root(
