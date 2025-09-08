@@ -33,6 +33,10 @@ def open_session():
         yield session
 
 
+def get_tutorial(db=Depends(open_session)):
+    return db.exec(select(Quest).where(Quest.id == TUTORIAL_ID)).one_or_none()
+
+
 def get_daily_quests(session: UserSession, db=Depends(open_session)):
     show_tutorial = (TUTORIAL_ITEM not in session.items) or (
         session.updated_at.date() == session.created_at.date()
@@ -80,20 +84,33 @@ def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_sess
     return quest, state
 
 
-def get_session_or_create(
-    request: Request, response: Response, db=Depends(open_session)
-):
-    session = _get_session(request, db, can_create=True)
-    request.state.session = session
-    return session
-
-
 def get_session_or_error(
     request: Request, response: Response, db=Depends(open_session)
 ):
     session = _get_session(request, db, can_create=False)
     request.state.session = session
     return session
+
+
+def get_session_or_none(request: Request, response: Response, db=Depends(open_session)):
+    try:
+        session = _get_session(request, db, can_create=False)
+        request.state.session = session
+        return session
+    except HTTPException:
+        return None
+    except Exception as e:
+        logger.error(f"Unknown Exception (get_session_or_none): {e}")
+        return None
+
+
+def create_new_session(db=Depends(open_session)) -> UserSession:
+    user_session = UserSession()
+    db.add(user_session)
+    db.commit()
+    db.refresh(user_session)
+    logger.info(f"creating new session: {user_session.id}")
+    return user_session
 
 
 def _get_session(
@@ -116,12 +133,7 @@ def _get_session(
             detail="Missing session id",
         )
     else:
-        user_session = UserSession()
-        db.add(user_session)
-        db.commit()
-        db.refresh(user_session)
-        logger.info(f"creating new session: {user_session.id}")
-        return user_session
+        return create_new_session(db=db)
     raise Exception("BUG FOUND")
 
 

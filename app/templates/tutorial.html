@@ -1,0 +1,19 @@
+{% import 'components/quest.j2' as component %}
+{% import 'components/inventory.j2' as inventory %}
+{% import 'components/notification.j2' as notification %}
+{% import 'components/footer.j2' as footer %}
+<html>
+<head>
+    <title>Daily Quest</title>
+    <link href="/static/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.js" integrity="sha384-ksKjJrwjL5VxqAkAZAVOPXvMkwAykMaNYegdixAESVr+KqLkKE8XBDoZuwyWVUDv" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div>
+      <h1>Daily Quest</h1>
+      {{ component.quest_form(quest, None, tutorial=True) }}
+    </div>
+    {{ footer.footer() }}
+</body>
+</html>

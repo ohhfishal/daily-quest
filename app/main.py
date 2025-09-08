@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Depends, Response, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -105,20 +105,41 @@ async def update_quest(
         )
     assert False, "Unreachable code reached"
 
+
 @app.get("/contact")
 async def contact(response: Response):
     raise Exception("NOT IMPLEMENTED")
 
+
+@app.get("/tutorial")
+async def tutorial(
+    request: Request,
+    response: Response,
+    # user_session=Depends(database.get_session_or_create),
+    db=Depends(database.open_session),
+):
+    # TODO: Make sure there is no session?
+    return templates.TemplateResponse(
+        request=request,
+        name="tutorial.html",
+        context={
+            "quest": database.get_tutorial(db),
+        },
+    )
+
+
 @app.get("/")
 async def root(
     request: Request,
-    response: Response,
-    user_session=Depends(database.get_session_or_create),
+    user_session=Depends(database.get_session_or_none),
     db=Depends(database.open_session),
 ):
+    if user_session is None:
+        return RedirectResponse("/tutorial")
+
     quests = database.get_daily_quests(user_session, db)
     if len(quests) == 0:
-        logger.error(f"Got 0 quests session={user_session.id}")
+        logger.warn(f"Got 0 quests session={user_session.id}")
 
     response = templates.TemplateResponse(
         request=request,
@@ -138,6 +159,31 @@ async def root(
         samesite="lax",
     )
     return response
+
+
+@app.post("/register")
+async def register(
+    request: Request,
+    user_session=Depends(database.get_session_or_none),
+    db=Depends(database.open_session),
+):
+    if user_session is not None:
+        return PlainTextResponse("Already in a valid session", status_code=400)
+    user_session = database.create_new_session(db=db)
+
+    _, _ = database.mark_quest_as_done(user_session, database.TUTORIAL_ID, db)
+
+    response = PlainTextResponse("OK")
+    response.headers["HX-Redirect"] = "/"
+    response.set_cookie(
+        key="session_id",
+        value=user_session.id,
+        httponly=True,
+        secure=False,  # TODO: set to true when using HTTPS
+        samesite="lax",
+    )
+    return response
+
 
 @app.get("/health")
 async def health():
