@@ -1,0 +1,40 @@
+{% import 'components/footer.j2' as footer %}
+<html>
+<head>
+    <title>Daily Quest</title>
+    <link href="/static/styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.js" integrity="sha384-ksKjJrwjL5VxqAkAZAVOPXvMkwAykMaNYegdixAESVr+KqLkKE8XBDoZuwyWVUDv" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <div id="feedback">
+      <h2>Contact</h1>
+
+      <div>
+        {% if contact.discord %}
+          <p>Feel free to contact me with any questions, bug reports etc.</p>
+          <b>Discord:</b> {{ contact.discord }}
+        {% endif %}
+      </div>
+
+      <form
+        id="feedback_form"
+        hx-post="/feedback"
+        hx-swap="none"
+      >
+        <hr>
+        <label for="feedback"><b>Feedback:</b></label><br>
+        <textarea
+          name="feedback"
+          rows="8"
+          cols="80">Enter any feedback you have here.
+        </textarea>
+        <br>
+        <button class="button_full">Submit</button>
+      </form>
+
+    </div>
+    {{ footer.footer() }}
+</body>
+</html>

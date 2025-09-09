@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 from app.database import database
 
 import functools
+import os
 from datetime import datetime
 
 import logging
@@ -107,8 +108,16 @@ async def update_quest(
 
 
 @app.get("/contact")
-async def contact(response: Response):
-    raise Exception("NOT IMPLEMENTED")
+async def contact(request: Request, response: Response):
+    return templates.TemplateResponse(
+        request=request,
+        name="contact.html",
+        context={
+            "contact": {
+                "discord": os.getenv("CONTACT_DISCORD", None),
+            },
+        },
+    )
 
 
 @app.get("/tutorial")

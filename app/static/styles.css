@@ -23,10 +23,10 @@ h3 {
     text-align: center;
 }
 
-form {
-    max-width: 50rem;
-    margin: 0 auto 1rem auto;
-}
+/* form { */
+/*     max-width: 50rem; */
+/*     margin: 0 auto 1rem auto; */
+/* } */
 
 fieldset {
     border: 1px solid #c0c0c0;
@@ -160,10 +160,10 @@ a:visited {
         font-size: 1rem;
     }
     
-    form {
-        max-width: 100%;
-        margin: 0 auto 0.8rem auto;
-    }
+    /* form { */
+    /*     max-width: 100%; */
+    /*     margin: 0 auto 0.8rem auto; */
+    /* } */
     
     fieldset {
         padding: 1rem;
@@ -226,4 +226,21 @@ a:visited {
     fieldset {
         padding: 1.2rem !important;
     }
+}
+
+/* Contact page styling */
+#feedback {
+  width: fit-content;
+}
+
+#feedback hr {
+  margin: 0.5rem 0rem;
+}
+
+#feedback_form > * {
+  margin: 0.25rem 0rem;
+}
+
+.button_full {
+  width: 100%;
 }

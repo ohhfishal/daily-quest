@@ -7,6 +7,7 @@
 
   env.HOST = "localhost";
   env.PORT = "8000";
+  env.CONTACT_DISCORD = "TEST_DISCORD";
 
   packages = with pkgs; [
     # sqlite
