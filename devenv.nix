@@ -5,9 +5,13 @@
     version = "3.13.5";
   };
 
+
   env.HOST = "localhost";
   env.PORT = "8000";
-  env.CONTACT_DISCORD = "TEST_DISCORD";
+  # env.CONTACT_DISCORD = "TEST_DISCORD";
+
+  dotenv.enable = true;
+  dotenv.filename = ".env";
 
   packages = with pkgs; [
     # sqlite
@@ -16,6 +20,8 @@
     python3.pkgs.uvicorn
     python3.pkgs.jinja2
     python3.pkgs.sqlmodel
+    python3.pkgs.httpx
+    python3.pkgs.python-multipart
 
     python3.pkgs.icecream
   ];

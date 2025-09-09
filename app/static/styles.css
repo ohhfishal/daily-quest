@@ -243,4 +243,22 @@ a:visited {
 
 .button_full {
   width: 100%;
+  margin: 0 auto;
+}
+
+.htmx-request .button_full {
+    background-color: #6c757d !important;
+    cursor: not-allowed !important;
+}
+
+.htmx-request .button-text {
+    display: none;
+}
+
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .htmx-indicator {
+    display: inline;
 }

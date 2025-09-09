@@ -1,9 +1,11 @@
-from fastapi import FastAPI, Request, Depends, Response, HTTPException
+from fastapi import FastAPI, Request, Depends, Response, HTTPException, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from typing import Annotated
 
 from app.database import database
+from app.discord import submit_feedback
 
 import functools
 import os
@@ -192,6 +194,19 @@ async def register(
         samesite="lax",
     )
     return response
+
+
+@app.post("/feedback")
+async def handle_feedback(
+    feedback: Annotated[str, Form()],
+    request: Request,
+    user_session=Depends(database.get_session_or_none),
+):
+    try:
+        await submit_feedback(feedback, user_session=user_session)
+    except Exception as e:
+        logger.error(f"submitting feedback: {e}")
+        raise HTTPException(detail="Unknown error occurred", status_code=500)
 
 
 @app.get("/health")
