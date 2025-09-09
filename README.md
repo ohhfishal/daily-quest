@@ -1,12 +1,7 @@
 # daily-quest
 
+Source code for [Your Daily Quest](https://yourdaily.quest)!
 
-## v0.1.0 Roadmap
-- [ ] Feature Request / Quest Idea workflows (Probably just a link to this repo)
-- [X] UI element to show a completed quest for the day
-- [X] Communicate to come back tomorrow
-- [X] Primative inventory section
-- [X] Notify check boxes must be clicked to redeem
 
 ## General Roadmap
 - [ ] Daily Streaks
@@ -14,8 +9,12 @@
 - [ ] Optional textbox to describe a quest
 - [ ] RSS Feed / General notifications
 
+## Contributing
+
+Development is done using [devenv](https://devenv.sh/):
+
 ```bash
 #!/bin/bash
 devenv shell
-./scripts/start.sh
+devenv up
 ```
