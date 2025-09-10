@@ -5,7 +5,7 @@ Source code for [Your Daily Quest](https://yourdaily.quest)!
 ## `v0.1.0` Roadmap
 - [ ] Fix the styling to work okay on mobile and desktop (Contact and main page!)
 - [ ] Write more quests
-- [ ] Have some notification that posting the feedback form worked
+- [X] Have some notification that posting the feedback form worked
 
 ## General Roadmap
 - [ ] Daily Streaks

@@ -213,6 +213,7 @@ async def handle_feedback(
             feedback,
             user_session=user_session,
         )
+        return PlainTextResponse("Thank you your feedback has been submitted.")
     except Exception as e:
         logger.error(f"submitting feedback: {e}")
         raise HTTPException(detail="Unknown error occurred", status_code=500)

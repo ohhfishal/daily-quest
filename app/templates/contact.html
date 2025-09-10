@@ -21,25 +21,27 @@
       <form
         id="feedback_form"
         hx-post="/feedback"
-        hx-swap="none"
+        hx-target="#form_body"
         hx-on:htmx:after-request="this.reset()"
       >
         <hr>
         <label for="feedback"><b>Feedback:</b></label><br>
-        <textarea
-          name="feedback"
-          rows="8"
-          placeholder="Enter any feedback you have here."
-          required
-          cols="80"></textarea>
-        <br>
-        <button type="submit" 
-                class="button_full"
-                hx-indicator="#loading"
-        >
-            <span class="button-text">Submit</span>
-            <span id="loading" class="htmx-indicator">Submitting...</span>
-        </button>
+        <div id="form_body">
+          <textarea
+            name="feedback"
+            rows="8"
+            placeholder="Enter any feedback you have here."
+            required
+            cols="80"></textarea>
+          <br>
+          <button type="submit" 
+                  class="button_full"
+                  hx-indicator="#loading"
+          >
+              <span class="button-text">Submit</span>
+              <span id="loading" class="htmx-indicator">Submitting...</span>
+          </button>
+        </div>
       </form>
     </div>
 
