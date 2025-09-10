@@ -6,9 +6,9 @@ from typing import Annotated
 
 from app.database import database
 from app.discord import submit_feedback
+from app.config import settings
 
 import functools
-import os
 from datetime import datetime
 
 import logging
@@ -110,13 +110,17 @@ async def update_quest(
 
 
 @app.get("/contact")
-async def contact(request: Request, response: Response):
+async def contact(
+    request: Request,
+    response: Response,
+    config=Depends(settings),
+):
     return templates.TemplateResponse(
         request=request,
         name="contact.html",
         context={
             "contact": {
-                "discord": os.getenv("CONTACT_DISCORD", None),
+                "discord": config.contact_discord,
             },
         },
     )
@@ -201,9 +205,14 @@ async def handle_feedback(
     feedback: Annotated[str, Form()],
     request: Request,
     user_session=Depends(database.get_session_or_none),
+    config=Depends(settings),
 ):
     try:
-        await submit_feedback(feedback, user_session=user_session)
+        await submit_feedback(
+            config.discord_webhook_url,
+            feedback,
+            user_session=user_session,
+        )
     except Exception as e:
         logger.error(f"submitting feedback: {e}")
         raise HTTPException(detail="Unknown error occurred", status_code=500)

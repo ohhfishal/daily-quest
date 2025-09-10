@@ -1,18 +1,13 @@
 import httpx
-import os
 from datetime import datetime
 
 import logging
 
 logger = logging.getLogger("uvicorn")
 
-DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "").strip()
-if not DISCORD_WEBHOOK_URL:
-    logger.warn("Discord webhooks are not enabled")
 
-
-async def submit_feedback(message: str, user_session=None):
-    if not DISCORD_WEBHOOK_URL:
+async def submit_feedback(discord_webhook_url: str, message: str, user_session=None):
+    if not discord_webhook_url:
         raise ValueError("Discord URL not configured corrrectly")
 
     embed = {
@@ -39,5 +34,5 @@ async def submit_feedback(message: str, user_session=None):
     }
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(DISCORD_WEBHOOK_URL, json=embed, timeout=10.0)
+        response = await client.post(discord_webhook_url, json=embed, timeout=10.0)
         response.raise_for_status()

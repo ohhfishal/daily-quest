@@ -22,6 +22,7 @@
     python3.pkgs.sqlmodel
     python3.pkgs.httpx
     python3.pkgs.python-multipart
+    python3.pkgs.pydantic-settings
 
     python3.pkgs.icecream
   ];
