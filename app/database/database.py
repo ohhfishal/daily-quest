@@ -7,6 +7,7 @@ from sqlalchemy import func, or_
 
 from app.database.user import UserSession, UserState
 from app.database.quest import Quest, load_quests
+from app.config import Settings
 
 import uuid
 import logging
@@ -137,20 +138,19 @@ def _get_session(
     raise Exception("BUG FOUND")
 
 
-def init(file=":memory:"):
+def init(config: Settings):
+    connection = config.database_connection
     connect_args = {"check_same_thread": False}
     global engine
-    if file == ":memory:":
+    if connection == "sqlite:///:memory:":
         engine = create_engine(
-            "sqlite:///:memory:",
-            # echo=True,
+            connection,
             connect_args=connect_args,
             poolclass=StaticPool,
         )
+        logger.warn("Using in memory database")
     else:
-        engine = create_engine(
-            f"sqlite:///{file}", echo=True, connect_args=connect_args
-        )
+        engine = create_engine(connection, connect_args=connect_args)
 
     SQLModel.metadata.create_all(engine)
 
@@ -168,7 +168,19 @@ def init(file=":memory:"):
         quests = []
 
     with Session(engine) as session:
+        ids = {quest.id: quest for quest in session.exec(select(Quest)).all()}
+        updating = 0
+        inserting = 0
         for quest in quests:
-            session.add(quest)
+            if existing_quest := ids[quest.id]:
+                existing_quest.release_date = quest.release_date
+                existing_quest.title = quest.title
+                existing_quest.rewards_gold = quest.rewards_gold
+                existing_quest.rewards_items = quest.rewards_items
+                existing_quest.objectives = quest.objectives
+                updating += 1
+            else:
+                inserting += 1
+                session.add(quest)
         session.commit()
-    logger.info(f"Loaded {len(quests)} quests")
+    logger.info(f"Updated {updating} quests and Created {inserting} quests")

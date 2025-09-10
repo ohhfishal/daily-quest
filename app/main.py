@@ -21,7 +21,8 @@ app = FastAPI()
 
 @app.on_event("startup")
 def on_startup():
-    database.init()
+    cfg = settings()
+    database.init(cfg)
     now = datetime.now()
     logger.debug(f"Stared: {now.date()} {now.time()}")
 

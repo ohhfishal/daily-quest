@@ -9,18 +9,18 @@
       }
     },
     "dragon_lair_0":  {
-      "title": "Enter the dragon's lair",
-      "release_date": "2025-09-08",
+      "title": "Study the dragon",
+      "release_date": "2025-09-10",
       "objectives": [
-        "Do something new and uncomfortable."
+        "Read for 20 minutes."
       ],
       "rewards": {
         "gold": 100
       }
     },
     "dragon_lair_1":  {
-      "title": "Enter the dragon's lair 2",
-      "release_date": "2025-09-09",
+      "title": "Enter the dragon's lair",
+      "release_date": "2025-09-11",
       "objectives": [
         "Do something new and uncomfortable."
       ],
