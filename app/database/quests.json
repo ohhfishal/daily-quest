@@ -5,6 +5,7 @@
       "release_date": "2025-09-02",
       "objectives": ["Take this."],
       "rewards": {
+        "xp": 5,
         "items": ["The Master Sword"]
       }
     },
@@ -13,7 +14,7 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Practice something you are good at."],
       "rewards": {
-        "xp": 10
+        "xp": 5
       }
     },
     "plan_quest_0": {
@@ -21,7 +22,7 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Write down something you are looking forward to."],
       "rewards": {
-        "xp": 10
+        "xp": 5
       }
     },
     "scour_market_0": {
@@ -37,7 +38,18 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Enjoy a meal."],
       "rewards": {
-        "xp": 10
+        "xp": 5
+      }
+    },
+    "prepare_adventure_0": {
+      "title": "Prepare for adventure",
+      "release_date": "PLACEHOLDER",
+      "objectives": [
+        "Drink water.",
+        "Stretch."
+      ],
+      "rewards": {
+        "xp": 5
       }
     },
     "admire_scenery_0": {
@@ -45,27 +57,27 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Go outside and admire a view."],
       "rewards": {
-        "xp": 10
+        "xp": 5
       }
     },
     "dragon_lair_0":  {
       "title": "Study the dragon",
-      "release_date": "2025-09-10",
+      "release_date": "PLACEHOLDER",
       "objectives": [
         "Read."
       ],
       "rewards": {
-        "xp": 10
+        "xp": 5
       }
     },
     "dragon_lair_1":  {
       "title": "Enter the dragon's lair",
-      "release_date": "2025-09-11",
+      "release_date": "PLACEHOLDER",
       "objectives": [
         "Do something new and uncomfortable."
       ],
       "rewards": {
-        "xp": 10
+        "xp": 5
       }
     }
   }

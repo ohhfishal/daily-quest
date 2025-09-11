@@ -36,7 +36,7 @@ class Quest(SQLModel, table=True):
             [
                 string
                 for string in [
-                    f"{self.rewards_xp} xp" if self.rewards_xp > 0 else ""
+                    f"{self.rewards_xp}xp" if self.rewards_xp > 0 else ""
                 ]
                 + self.rewards_items
                 if string
