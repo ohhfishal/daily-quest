@@ -58,9 +58,12 @@ def load_quests(file: str) -> List[Quest]:
                 quest.id = id
                 quest.title = metadata["title"]
                 quest.objectives = metadata["objectives"]
-                quest.release_date = datetime.datetime.strptime(
-                    metadata["release_date"], DATE_FORMAT
-                )
+                if metadata["release_date"] == "PLACEHOLDER":
+                    quest.release_date = datetime.date.today()
+                else:
+                    quest.release_date = datetime.datetime.strptime(
+                        metadata["release_date"], DATE_FORMAT
+                    )
 
                 # Optional Fields
                 rewards = metadata.get("rewards", {})

@@ -172,7 +172,7 @@ def init(config: Settings):
         updating = 0
         inserting = 0
         for quest in quests:
-            if existing_quest := ids[quest.id]:
+            if existing_quest := ids.get(quest.id, None):
                 existing_quest.release_date = quest.release_date
                 existing_quest.title = quest.title
                 existing_quest.rewards_gold = quest.rewards_gold

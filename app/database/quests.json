@@ -8,14 +8,54 @@
         "items": ["The Master Sword"]
       }
     },
+    "sharpen_sword_0": {
+      "title": "Sharpen your sword.",
+      "release_date": "PLACEHOLDER",
+      "objectives": ["Practice something you are good at."],
+      "rewards": {
+        "gold": 10
+      }
+    },
+    "plan_quest_0": {
+      "title": "Plan your quest.",
+      "release_date": "PLACEHOLDER",
+      "objectives": ["Write down something you are looking forward to."],
+      "rewards": {
+        "gold": 10
+      }
+    },
+    "scour_market_0": {
+      "title": "Scour the market.",
+      "release_date": "PLACEHOLDER",
+      "objectives": ["Look for something you think you've lost."],
+      "rewards": {
+        "items": ["Weird artifact"]
+      }
+    },
+    "visit_tavern": {
+      "title": "Visit the Tavern",
+      "release_date": "PLACEHOLDER",
+      "objectives": ["Enjoy a meal."],
+      "rewards": {
+        "gold": 10
+      }
+    },
+    "admire_scenery_0": {
+      "title": "Admire the Scenery",
+      "release_date": "PLACEHOLDER",
+      "objectives": ["Go outside and admire a view."],
+      "rewards": {
+        "items": ["A good view"]
+      }
+    },
     "dragon_lair_0":  {
       "title": "Study the dragon",
       "release_date": "2025-09-10",
       "objectives": [
-        "Read for 20 minutes."
+        "Read."
       ],
       "rewards": {
-        "gold": 100
+        "gold": 10
       }
     },
     "dragon_lair_1":  {
@@ -25,7 +65,7 @@
         "Do something new and uncomfortable."
       ],
       "rewards": {
-        "gold": 100
+        "gold": 10
       }
     }
   }
