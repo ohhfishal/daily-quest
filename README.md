@@ -2,10 +2,7 @@
 
 Source code for [Your Daily Quest](https://yourdaily.quest)!
 
-## `v0.1.0` Roadmap
-- [ ] Write more quests (15-30 to start)
-
-## General Roadmap
+## General Roadmap Ideas (Not final)
 - [ ] Offline mode / Custom Quests (not sent to the server)
 - [ ] Daily Streaks
 - [ ] Share button
