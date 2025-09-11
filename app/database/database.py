@@ -2,7 +2,7 @@ from fastapi import Depends, Request, Response, HTTPException
 from sqlmodel import create_engine, Session, SQLModel, select
 from sqlmodel.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import func, or_
+from sqlalchemy import func, and_, or_
 
 
 from app.database.user import UserSession, UserState
@@ -51,19 +51,31 @@ def get_daily_quests(session: UserSession, db=Depends(open_session)):
                     (show_tutorial and Quest.id == TUTORIAL_ID),
                 )
             )
-            .order_by(Quest.release_date)
             .outerjoin(
                 UserState,
-                Quest.id == UserState.quest,
+                and_(
+                    UserState.user == session.id,
+                    Quest.id == UserState.quest,
+                ),
             )
+            .order_by(Quest.release_date)
         )
     ).all()
 
 
 def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_session)):
+    # Make sure the quest exists
     quest = db.get(Quest, quest_id)
     if not quest or (quest.id != TUTORIAL_ID and quest.release_date != date.today()):
         raise ValueError("Quest does not exist")
+
+    # Check if quest is already done
+    if db.exec(
+        select(UserState).where(
+            and_(UserState.user == session.id, UserState.quest == quest_id)
+        )
+    ).one_or_none():
+        raise RuntimeError("Quest already completed")
 
     state = UserState(user=session.id, quest=quest_id)
     db.add(state)

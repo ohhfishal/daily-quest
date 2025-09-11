@@ -95,6 +95,11 @@ async def update_quest(
             status_code=404,
             detail="Quest does not exist",
         )
+    except RuntimeError:
+        raise HTTPException(
+            status_code=409,
+            detail="Quest is already done",
+        )
     except AssertionError as e:
         logger.error(f"Assert tripped: {e}")
         raise HTTPException(
