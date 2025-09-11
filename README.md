@@ -3,15 +3,14 @@
 Source code for [Your Daily Quest](https://yourdaily.quest)!
 
 ## `v0.1.0` Roadmap
-- [ ] Fix the styling to work okay on mobile and desktop (Contact and main page!)
-- [ ] Write more quests
-- [X] Have some notification that posting the feedback form worked
+- [ ] Write more quests (15-30 to start)
 
 ## General Roadmap
+- [ ] Offline mode / Custom Quests (not sent to the server)
 - [ ] Daily Streaks
 - [ ] Share button
-- [ ] Optional textbox to describe a quest
-- [ ] RSS Feed / General notifications
+- [ ] XP Bar and levels
+- [ ] Use for items?
 
 ## Contributing
 
