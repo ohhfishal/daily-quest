@@ -13,7 +13,7 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Practice something you are good at."],
       "rewards": {
-        "gold": 10
+        "xp": 10
       }
     },
     "plan_quest_0": {
@@ -21,7 +21,7 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Write down something you are looking forward to."],
       "rewards": {
-        "gold": 10
+        "xp": 10
       }
     },
     "scour_market_0": {
@@ -37,7 +37,7 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Enjoy a meal."],
       "rewards": {
-        "gold": 10
+        "xp": 10
       }
     },
     "admire_scenery_0": {
@@ -45,7 +45,7 @@
       "release_date": "PLACEHOLDER",
       "objectives": ["Go outside and admire a view."],
       "rewards": {
-        "items": ["A good view"]
+        "xp": 10
       }
     },
     "dragon_lair_0":  {
@@ -55,7 +55,7 @@
         "Read."
       ],
       "rewards": {
-        "gold": 10
+        "xp": 10
       }
     },
     "dragon_lair_1":  {
@@ -65,7 +65,7 @@
         "Do something new and uncomfortable."
       ],
       "rewards": {
-        "gold": 10
+        "xp": 10
       }
     }
   }

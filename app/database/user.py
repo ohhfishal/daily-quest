@@ -28,7 +28,7 @@ class UserSession(SQLModel, table=True):
         ),
     )
 
-    gold: int = Field(default=0)
+    xp: int = Field(default=0)
     items: List[str] = Field(
         default_factory=list,
         sa_column=Column(JSON),

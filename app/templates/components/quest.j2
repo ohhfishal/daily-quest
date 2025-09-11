@@ -1,6 +1,7 @@
 {% macro quest_form(quest, session, tutorial=False) %}
 {% if tutorial %}
   <form 
+    class="card"
     id="form_tutorial"
     hx-post="/register"
   >

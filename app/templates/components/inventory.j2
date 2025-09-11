@@ -1,9 +1,9 @@
 {% macro card(session) %}
 <form class="card" hx-get="components/inventory" hx-trigger="quest_completed from:body">
-{% if session.gold != 0 or session.items | length > 0 %}
+{% if session.xp != 0 or session.items | length > 0 %}
     <fieldset>
       <legend>$ Loot $</legend>
-      <div><strong>Gold: </strong> {{ session.gold}}</div>
+      <div><strong>XP: </strong> {{ session.xp}}</div>
       <div><strong>Items: </strong>({{ session.items | length }})</div>
       <ul>
         {% for item in session.items %}

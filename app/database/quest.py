@@ -28,7 +28,7 @@ class Quest(SQLModel, table=True):
         sa_column=Column(JSON),
     )
 
-    rewards_gold: int = Field(default=0)
+    rewards_xp: int = Field(default=0)
     rewards_items: List[str] = Field(default_factory=list, sa_column=Column(JSON))
 
     def rewards_string(self):
@@ -36,7 +36,7 @@ class Quest(SQLModel, table=True):
             [
                 string
                 for string in [
-                    f"{self.rewards_gold} gold" if self.rewards_gold > 0 else ""
+                    f"{self.rewards_xp} xp" if self.rewards_xp > 0 else ""
                 ]
                 + self.rewards_items
                 if string
@@ -67,7 +67,7 @@ def load_quests(file: str) -> List[Quest]:
 
                 # Optional Fields
                 rewards = metadata.get("rewards", {})
-                quest.rewards_gold = rewards.get("gold", 0)
+                quest.rewards_xp = rewards.get("xp", 0)
                 quest.rewards_items = rewards.get("items", [])
 
                 quests.append(quest)

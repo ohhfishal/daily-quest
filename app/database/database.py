@@ -68,7 +68,7 @@ def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_sess
     state = UserState(user=session.id, quest=quest_id)
     db.add(state)
 
-    session.gold += quest.rewards_gold
+    session.xp += quest.rewards_xp
     session.items = session.items + quest.rewards_items
     db.add(session)
     db.commit()
@@ -76,8 +76,8 @@ def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_sess
     db.refresh(session)
     db.refresh(state)
 
-    assert session.gold >= quest.rewards_gold, (
-        f"Expected at least {quest.rewards_gold} in session"
+    assert session.xp >= quest.rewards_xp, (
+        f"Expected at least {quest.rewards_xp} in session"
     )
     assert len(session.items) >= len(quest.rewards_items), (
         f"Expected at least {len(quest.rewards_items)} in items"
@@ -175,7 +175,7 @@ def init(config: Settings):
             if existing_quest := ids.get(quest.id, None):
                 existing_quest.release_date = quest.release_date
                 existing_quest.title = quest.title
-                existing_quest.rewards_gold = quest.rewards_gold
+                existing_quest.rewards_xp = quest.rewards_xp
                 existing_quest.rewards_items = quest.rewards_items
                 existing_quest.objectives = quest.objectives
                 updating += 1
