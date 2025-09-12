@@ -15,9 +15,9 @@ import logging
 
 logger = logging.getLogger("uvicorn")
 
-
 app = FastAPI()
 
+MAX_COOKIE_AGE =  10 * 365 * 24 * 60 * 60 # 10 Years
 
 @app.on_event("startup")
 def on_startup():
@@ -177,6 +177,7 @@ async def root(
         value=user_session.id,
         httponly=True,
         secure=False,  # TODO: set to true when using HTTPS
+        max_age=MAX_COOKIE_AGE,
         samesite="lax",
     )
     return response
@@ -201,6 +202,7 @@ async def register(
         value=user_session.id,
         httponly=True,
         secure=False,  # TODO: set to true when using HTTPS
+        max_age=MAX_COOKIE_AGE,
         samesite="lax",
     )
     return response
