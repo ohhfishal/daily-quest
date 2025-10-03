@@ -2,7 +2,6 @@
   "quests": {
     "tutorial":  {
       "title": "It's dangerous to go alone!",
-      "release_date": "2025-09-02",
       "objectives": ["Take this."],
       "rewards": {
         "xp": 5,
@@ -11,7 +10,6 @@
     },
     "sharpen_sword_0": {
       "title": "Sharpen your sword.",
-      "release_date": "2025-09-11",
       "objectives": ["Practice something you are good at."],
       "rewards": {
         "xp": 5
@@ -19,7 +17,6 @@
     },
     "plan_quest_0": {
       "title": "Plan your quest.",
-      "release_date": "2025-09-12",
       "objectives": ["Write down something you are looking forward to."],
       "rewards": {
         "xp": 5
@@ -27,7 +24,6 @@
     },
     "scour_market_0": {
       "title": "Scour the market.",
-      "release_date": "2025-09-13",
       "objectives": ["Look for something you think you've lost."],
       "rewards": {
         "items": ["Weird artifact"]
@@ -35,7 +31,6 @@
     },
     "visit_tavern": {
       "title": "Visit the tavern.",
-      "release_date": "2025-09-14",
       "objectives": ["Enjoy a meal."],
       "rewards": {
         "xp": 5
@@ -43,7 +38,6 @@
     },
     "prepare_adventure_0": {
       "title": "Prepare for adventure.",
-      "release_date": "2025-09-15",
       "objectives": [
         "Drink water.",
         "Stretch."
@@ -54,7 +48,6 @@
     },
     "admire_scenery_0": {
       "title": "Admire the scenery.",
-      "release_date": "2025-09-16",
       "objectives": ["Go outside and admire a view."],
       "rewards": {
         "xp": 5
@@ -62,7 +55,6 @@
     },
     "study_tracks_0":  {
       "title": "Study the tracks.",
-      "release_date": "2025-09-17",
       "objectives": [
         "Read."
       ],
@@ -72,7 +64,6 @@
     },
     "pet_0":  {
       "title": "Pet the owlbear",
-      "release_date": "2025-09-18",
       "objectives": [
         "Look at pictures of cute animals."
       ],

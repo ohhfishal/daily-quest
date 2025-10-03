@@ -2,7 +2,6 @@ from sqlmodel import Field, SQLModel, Column, JSON
 
 from typing import List
 
-import datetime
 import json
 import logging
 
@@ -18,10 +17,6 @@ class Quest(SQLModel, table=True):
         index=True,
         primary_key=True,
     )
-    release_date: datetime.date = Field(
-        index=True,
-    )
-
     title: str
     objectives: List[str] = Field(
         default_factory=list,
@@ -41,7 +36,6 @@ class Quest(SQLModel, table=True):
             ],
         )
 
-
 def load_quests(file: str) -> List[Quest]:
     quests = []
 
@@ -56,12 +50,6 @@ def load_quests(file: str) -> List[Quest]:
                 quest.id = id
                 quest.title = metadata["title"]
                 quest.objectives = metadata["objectives"]
-                if metadata["release_date"] == "PLACEHOLDER":
-                    quest.release_date = datetime.date.today()
-                else:
-                    quest.release_date = datetime.datetime.strptime(
-                        metadata["release_date"], DATE_FORMAT
-                    )
 
                 # Optional Fields
                 rewards = metadata.get("rewards", {})

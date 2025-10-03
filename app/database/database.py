@@ -40,16 +40,17 @@ def get_tutorial(db=Depends(open_session)):
 
 def get_daily_quests(session: UserSession, db=Depends(open_session)):
     show_tutorial = (TUTORIAL_ITEM not in session.items) or (
+        session.created_at.date() == date.today() or
         session.updated_at.date() == session.created_at.date()
     )
-    return db.exec(
-        (
+    results = db.exec(
+    (
             select(Quest, UserState)
             .where(
                 or_(
-                    func.date(Quest.release_date) == date.today(),
-                    (show_tutorial and Quest.id == TUTORIAL_ID),
-                )
+                    show_tutorial,
+                    Quest.id != TUTORIAL_ID,
+                ),
             )
             .outerjoin(
                 UserState,
@@ -58,15 +59,24 @@ def get_daily_quests(session: UserSession, db=Depends(open_session)):
                     Quest.id == UserState.quest,
                 ),
             )
-            .order_by(Quest.release_date)
+            .filter(
+                or_(
+                    func.DATE(UserState.created_at) == date.today(),
+                    UserState.created_at.is_(None),
+                )
+            )
+            # .order_by(UserState is None)
+            # .order_by(func.random())
+            .limit(2)
         )
     ).all()
+    return results
 
 
 def mark_quest_as_done(session: UserSession, quest_id: str, db=Depends(open_session)):
     # Make sure the quest exists
     quest = db.get(Quest, quest_id)
-    if not quest or (quest.id != TUTORIAL_ID and quest.release_date != date.today()):
+    if not quest:
         raise ValueError("Quest does not exist")
 
     # Check if quest is already done
@@ -185,7 +195,6 @@ def init(config: Settings):
         inserting = 0
         for quest in quests:
             if existing_quest := ids.get(quest.id, None):
-                existing_quest.release_date = quest.release_date
                 existing_quest.title = quest.title
                 existing_quest.rewards_xp = quest.rewards_xp
                 existing_quest.rewards_items = quest.rewards_items
